@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cryptographic Wisdom</title>
+    <style>
+        /* EXTREME MINIMALISM & PROCEDURAL THEME VARIABLES */
+        :root {
+            --bg: hsl(0, 0%, 5%);
+            --txt: hsl(0, 0%, 95%);
+            --accent: hsl(0, 0%, 40%);
+            --font-main: "Helvetica Neue", "SF Pro Display", Helvetica, Arial, sans-serif;
+            --font-mono: "Courier New", Courier, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none; /* Prevent text selection for pure app feel */
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg);
+            color: var(--txt);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 10vw;
+            overflow: hidden;
+            cursor: pointer; /* Entire screen is a button */
+            transition: background-color 2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* MAIN QUOTE STAGE */
+        .quote-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .quote-text {
+            font-size: clamp(1.8rem, 4vw, 4rem);
+            font-weight: 300;
+            line-height: 1.3;
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+            word-break: break-word;
+            white-space: pre-wrap;
+            transition: color 2s ease;
+        }
+        
+        .quote-author {
+            font-size: clamp(0.7rem, 1.5vw, 1rem);
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            color: var(--accent);
+            opacity: 0;
+            transition: opacity 1.5s ease, color 2s ease;
+            font-weight: 600;
+        }
+
+        /* MONOSPACE OVERRIDE FOR CIPHER PHASE */
+        .is-cipher {
+            font-family: var(--font-mono);
+            font-weight: 400;
+            font-size: clamp(1.2rem, 2.5vw, 2.5rem);
+            letter-spacing: 2px;
+            word-break: break-all;
+        }
+
+        /* SUBTLE INTERACTION HINT */
+        .hint {
+            position: fixed;
+            bottom: 3vh;
+            font-size: 0.5rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            opacity: 0.3;
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 0.1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quote-wrapper">
+        <div class="quote-text is-cipher" id="quote-text">01001001 01101110 01101001 01110100</div>
+        <div class="quote-author" id="quote-author">SYSTEM</div>
+    </div>
+
+    <div class="hint">Tap anywhere to seek</div>
+
+    <script>
+        /**
+         * EXTREME ARCHITECTURE - CRYPTOGRAPHIC DISPLAY & INFINITE THEMES
+         */
+
+        const DOM = {
+            txt: document.getElementById('quote-text'),
+            author: document.getElementById('quote-author'),
+            root: document.documentElement
+        };
+
+        // --- 1. INFINITE HSL COLOR MANIFOLD ENGINE ---
+        // Generates millions of visually stunning color palettes mathematically
+        const ThemeEngine = (() => {
+            return {
+                mutate: () => {
+                    // Random base Hue (0-360)
+                    const baseHue = Math.random() * 360;
+                    
+                    // Saturation (10% to 90%)
+                    const sat = 10 + Math.random() * 80;
+                    
+                    // Determine if theme is Dark or Light (50/50 chance)
+                    const isDark = Math.random() > 0.5;
+                    
+                    // Calculate Lightness based on Dark/Light mode to ensure high contrast
+                    const bgLightness = isDark ? (2 + Math.random() * 15) : (85 + Math.random() * 13);
+                    const txtLightness = isDark ? (80 + Math.random() * 15) : (5 + Math.random() * 15);
+                    
+                    // Accent color logic: Complementary (180 deg) or Analogous (30 deg shift)
+                    const accentHueOffset = Math.random() > 0.5 ? 180 : (Math.random() > 0.5 ? 30 : -30);
+                    const accentHue = (baseHue + accentHueOffset) % 360;
+                    const accentSat = Math.min(100, sat + 20); // Slightly more saturated
+                    const accentLightness = isDark ? 60 : 40; // Mid-tone for visibility
+
+                    // Apply variables to CSS root
+                    DOM.root.style.setProperty('--bg', `hsl(${baseHue}, ${sat}%, ${bgLightness}%)`);
+                    DOM.root.style.setProperty('--txt', `hsl(${baseHue}, ${sat/2}%, ${txtLightness}%)`);
+                    DOM.root.style.setProperty('--accent', `hsl(${accentHue}, ${accentSat}%, ${accentLightness}%)`);
+                }
+            };
+        })();
+
+        // --- 2. MULTI-LAYER CRYPTOGRAPHIC DECRYPTION ENGINE ---
+        // Simulates complex decryption: Binary -> Hex -> Base64 Noise -> ASCII
+        const Decryptor = (() => {
+            let reqId = null;
+            const ASCII_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*+<>?';
+            
+            // Helper: Text to Binary
+            const toBinary = (str) => str.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
+            // Helper: Text to Hex
+            const toHex = (str) => str.split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
+
+            return {
+                execute: (targetText) => {
+                    if (reqId) cancelAnimationFrame(reqId);
+                    
+                    DOM.txt.classList.add('is-cipher');
+                    DOM.author.style.opacity = 0;
+
+                    // Initialize character states
+                    const chars = targetText.split('').map(char => ({
+                        target: char,
+                        isSpace: char === ' ',
+                        phase: 0, // 0: Binary, 1: Hex, 2: Noise, 3: Decrypted
+                        binary: char.charCodeAt(0).toString(2).padStart(8, '0'),
+                        hex: char.charCodeAt(0).toString(16).padStart(2, '0'),
+                        delay: Math.random() * 60 // Randomize when decryption starts per char
+                    }));
+
+                    let frame = 0;
+                    const totalFrames = 150; // Total animation duration
+
+                    const step = () => {
+                        frame++;
+                        let allDecrypted = true;
+                        let outputHTML = '';
+
+                        chars.forEach(c => {
+                            if (c.isSpace) {
+                                outputHTML += ' ';
+                                return;
+                            }
+
+                            // State Machine progression based on time/frames
+                            if (frame > c.delay + 60) c.phase = 3;
+                            else if (frame > c.delay + 40) c.phase = 2;
+                            else if (frame > c.delay + 20) c.phase = 1;
+
+                            // Render based on Phase
+                            switch (c.phase) {
+                                case 0: 
+                                    outputHTML += Math.random() > 0.5 ? '0' : '1'; 
+                                    allDecrypted = false; 
+                                    break;
+                                case 1: 
+                                    const hexChars = '0123456789ABCDEF';
+                                    outputHTML += hexChars[Math.floor(Math.random() * hexChars.length)]; 
+                                    allDecrypted = false; 
+                                    break;
+                                case 2: 
+                                    outputHTML += ASCII_CHARS[Math.floor(Math.random() * ASCII_CHARS.length)]; 
+                                    allDecrypted = false; 
+                                    break;
+                                case 3: 
+                                    outputHTML += c.target; 
+                                    break;
+                            }
+                        });
+
+                        DOM.txt.innerText = outputHTML;
+
+                        if (!allDecrypted && frame < totalFrames) {
+                            reqId = requestAnimationFrame(step);
+                        } else {
+                            // Finalize
+                            DOM.txt.innerText = targetText;
+                            DOM.txt.classList.remove('is-cipher');
+                            DOM.author.style.opacity = 1;
+                        }
+                    };
+
+                    reqId = requestAnimationFrame(step);
+                }
+            };
+        })();
+
+        // --- 3. CORE LOGIC & NETWORK ---
+        let isFetching = false;
+
+        async function triggerEvent() {
+            if (isFetching) return;
+            isFetching = true;
+
+            // 1. Mutate the entire color universe instantly
+            ThemeEngine.mutate();
+
+            // 2. Hide Author
+            DOM.author.style.opacity = 0;
+
+            try {
+                // 3. Fetch Data
+                const res = await fetch('https://dummyjson.com/quotes/random');
+                const data = await res.json();
+                
+                // Set Author Text (hidden initially)
+                DOM.author.textContent = `— ${data.author} —`;
+
+                // 4. Trigger Cryptographic Visualizer
+                Decryptor.execute(data.quote);
+
+            } catch(e) {
+                DOM.author.textContent = "— SYSTEM KERNEL —";
+                Decryptor.execute("Connection lost. The void stares back.");
+            } finally {
+                // Prevent clicking too fast
+                setTimeout(() => { isFetching = false; }, 1000);
+            }
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            ThemeEngine.mutate(); // Initial color theme
+            triggerEvent();       // Initial quote
+            
+            // The entire document is the trigger
+            document.body.addEventListener('click', triggerEvent);
+        };
+    </script>
+</body>
+</html>
